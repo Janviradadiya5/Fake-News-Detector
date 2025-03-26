@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+    <div class="bg-gray-800 shadow-lg rounded-lg p-6 w-full max-w-md fade-in">
+        <h1 class="text-2xl font-bold text-center text-blue-400">Prediction Result</h1>
+        <div class="mt-4 text-center">
+            <p class="text-lg font-semibold">
+                This news is:
+                <span class="text-2xl font-bold {% if prediction == 'Fake' %}text-red-500{% else %}text-green-500{% endif %}">
+                    {{ prediction }}
+                </span>
+            </p>
+            <p class="mt-2 text-sm text-gray-300">Confidence Score: <span class="font-semibold">{{ probability|round(2) }}%</span></p>
+        </div>
+        <div class="mt-6 flex justify-center">
+            <a href="/" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all">Go Back</a>
+        </div>
+    </div>
+
+</body>
+</html>

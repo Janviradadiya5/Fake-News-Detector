@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Header -->
+    <header class="py-6 text-center bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
+        <h1 class="text-4xl font-bold tracking-wider">📰 Fake News Detector</h1>
+        <p class="text-lg opacity-80">Analyze news articles and check their authenticity</p>
+    </header>
+
+    <!-- Form Section -->
+    <section class="max-w-3xl mx-auto mt-10 p-6 bg-gray-800 shadow-xl rounded-lg">
+        <h2 class="text-2xl font-semibold text-center">Enter News to Analyze</h2>
+        <form action="/predict" method="POST" class="mt-6">
+            <textarea name="news" rows="5" class="w-full p-4 rounded-lg bg-gray-700 text-white border-2 border-gray-600 focus:border-blue-500 outline-none" placeholder="Paste news article here..." required></textarea>
+            <button type="submit" class="w-full mt-4 py-3 bg-blue-500 hover:bg-blue-600 transition-all text-lg font-bold rounded-lg shadow-lg">Analyze News</button>
+        </form>
+    </section>
+
+    <!-- Fetch RSS News Button -->
+    <div class="text-center mt-8">
+        <button onclick="fetchRSSNews()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-lg font-semibold rounded-lg shadow-md transition-all">🔍 Fetch RSS News</button>
+    </div>
+
+    <!-- Display RSS News Results -->
+    <section id="rssResults" class="max-w-4xl mx-auto mt-10 hidden">
+        <h2 class="text-2xl font-semibold text-center">Latest News Predictions</h2>
+        <div id="newsList" class="mt-6"></div>
+    </section>
+
+    <script>
+        async function fetchRSSNews() {
+            const response = await fetch('/predict_rss');
+            const data = await response.json();
+            document.getElementById('rssResults').classList.remove('hidden');
+
+            let newsHTML = '';
+            data.forEach(news => {
+                newsHTML += `
+                    <div class="p-4 mb-4 bg-gray-800 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold">${news.title}</h3>
+                        <p class="text-sm opacity-80">Source: ${news.source}</p>
+                        <p class="text-lg mt-2"><span class="px-3 py-1 rounded ${news.result === 'Fake' ? 'bg-red-500' : 'bg-green-500'}">${news.result}</span></p>
+                        <p class="text-sm opacity-70">Confidence: ${news.confidence}%</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('newsList').innerHTML = newsHTML;
+        }
+    </script>
+
+</body>
+</html>
